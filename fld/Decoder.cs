@@ -10,7 +10,7 @@ public static class Decoder
     {
         try
         {
-            return new Message(normalizedFixLogText, validateLog);
+            return new Message(fixLogText, validateLog);
         } 
         catch(Exception ex)
         {
@@ -24,23 +24,18 @@ public static class Decoder
         CancellationToken cancellationToken = default
     )
     {
-        var normalizedFixLogText = fixLogText.ToNormalizedFixLogText();
-        var fixLogMessageParsed = ParseFixLogText(normalizedFixLogText, validateLog).Value;
+        var normalizedFixLogText = fixLogText.ToNormalizedFixLogText(delimiter);
+        var fixLogMessageParsed = ParseFixLogText(normalizedFixLogText, validateLog);
 
-        if(fixLogMessageParsed.Value is Exception ex)
+        if(fixLogMessageParsed.IsT1)
         {
-            return $"""An error occured while parsing the provided fix log '({fixLogText})' with error: {ex.Message}""";
+            return $"An error occurred while parsing the provided fix log '({fixLogText})' with error: {fixLogMessageParsed.AsT1.Message}";
         }
 
         var fixLogMessage = fixLogMessageParsed.AsT0;
 
-        var fixVersion = fixLog.Header.GetString(Tags.BeginString);
-        IReadOnlyDictionary<int, string>? fixNamesDefinition = fixVersion switch
-        {
-            "FIX.4.2" => FixTagDefinitions.Fix42,
-            "FIX.4.4" => FixTagDefinitions.Fix44,
-            _ => null
-        };
+        var fixVersion = fixLogMessage.Header.GetString(Tags.BeginString);
+        var fixNamesDefinition = fixVersion.ToFixTagDefinitions();
 
         if (fixNamesDefinition == null)
         {
@@ -57,11 +52,11 @@ public static class Decoder
         {
             if(cancellationToken.IsCancellationRequested) 
             {
-                return [];
+                return Array.Empty<FixFragment>();
             }
 
             var tag = field.Value.Tag;
-            fixNamesDefinition.TryGetValue(tag, out var? name);
+            fixNamesDefinition.TryGetValue(tag, out var name);
 
             result.Add(
                 new(

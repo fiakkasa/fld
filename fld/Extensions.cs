@@ -1,3 +1,5 @@
+using QuickFix;
+
 namespace fld;
 
 public static class Extensions
@@ -9,12 +11,20 @@ public static class Extensions
     private const string _markdownTableInnerSeparator = " | ";
     private const char _markdownTableUnderlineChar = '-';
 
-    private string ToNormalizedFixLogText(string fixLogText) =>
+    public static string ToNormalizedFixLogText(this string fixLogText, char delimiter) =>
         fixLogText
             .Replace(delimiter, Message.SOH)
             .Trim()
             .TrimStart(_fixLogStart)
             .TrimEnd(_fixLogEnd);
+
+    public static IReadOnlyDictionary<int, string>? ToFixTagDefinitions(this string fixVersion) =>
+        fixVersion switch
+        {
+            "FIX.4.2" => FixTagDefinitions.Fix42,
+            "FIX.4.4" => FixTagDefinitions.Fix44,
+            _ => null
+        };
 
     public static IEnumerable<string> ToEnumeratedMarkdownTable(
         this IReadOnlyCollection<FixFragment> entries, 
@@ -100,7 +110,7 @@ public static class Extensions
         {
             if(cancellationToken.IsCancellationRequested) 
             {
-                yield break;
+                break;
             }
 
             if (entry.Tag.Length > headerWithWidthPadding[nameof(FixFragment.Tag)])
