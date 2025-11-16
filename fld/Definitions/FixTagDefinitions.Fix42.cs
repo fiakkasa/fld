@@ -1,4 +1,4 @@
-namespace fld;
+namespace fld.Definitions;
 
 // https://www.onixs.biz/fix-dictionary.html
 public static partial class FixTagDefinitions

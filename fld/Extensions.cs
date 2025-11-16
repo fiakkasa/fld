@@ -1,3 +1,6 @@
+using fld.Definitions;
+using fld.Models;
+
 using QuickFix;
 
 namespace fld;
@@ -11,12 +14,36 @@ public static class Extensions
     private const string _markdownTableInnerSeparator = " | ";
     private const char _markdownTableUnderlineChar = '-';
 
+    private static string NormalizeBracesConditionally(this string text) =>
+        (text.StartsWith(_fixLogStart), text.EndsWith(_fixLogEnd)) switch
+        {
+            (true, true) => text[1..^1],
+            (true, false) => text[1..],
+            (false, true) => text[..^1],
+            _ => text
+        };
+
+    private static string SetDelimiterConditionally(this string text, char delimiter)
+    {
+        if (text.Contains(delimiter))
+        {
+            text = text.Replace(delimiter, Message.SOH);
+
+            if (!text.EndsWith(Message.SOH))
+            {
+                text += Message.SOH;
+            }
+        }
+
+        return text;
+    }
+
     public static string ToNormalizedFixLogText(this string fixLogText, char delimiter) =>
         fixLogText
-            .Replace(delimiter, Message.SOH)
             .Trim()
-            .TrimStart(_fixLogStart)
-            .TrimEnd(_fixLogEnd);
+            .NormalizeBracesConditionally()
+            .Trim()
+            .SetDelimiterConditionally(delimiter);
 
     public static IReadOnlyDictionary<int, string>? ToFixTagDefinitions(this string fixVersion) =>
         fixVersion switch
@@ -27,7 +54,7 @@ public static class Extensions
         };
 
     public static IEnumerable<string> ToEnumeratedMarkdownTable(
-        this IReadOnlyCollection<FixFragment> entries, 
+        this IReadOnlyCollection<FixFragment> entries,
         CancellationToken cancellationToken = default
     )
     {
@@ -48,14 +75,14 @@ public static class Extensions
         int maxNameLength = headerWithWidthPadding[nameof(FixFragment.Name)];
         int maxValueLength = headerWithWidthPadding[nameof(FixFragment.Value)];
 
-        foreach(var item in headerWithWidthPadding.ToMarkdownTableHeader(cancellationToken))
+        foreach (var item in headerWithWidthPadding.ToMarkdownTableHeader(cancellationToken))
         {
             yield return item;
         }
 
         foreach (FixFragment entry in entries)
         {
-            if(cancellationToken.IsCancellationRequested) 
+            if (cancellationToken.IsCancellationRequested)
             {
                 yield break;
             }
@@ -70,12 +97,12 @@ public static class Extensions
         }
     }
 
-    public static IEnumerable<string> ToMarkdownTableHeader(
+    private static IEnumerable<string> ToMarkdownTableHeader(
         this Dictionary<string, int> headerWithWidthPadding,
         CancellationToken cancellationToken = default
     )
     {
-        if(cancellationToken.IsCancellationRequested) 
+        if (cancellationToken.IsCancellationRequested)
         {
             yield break;
         }
@@ -86,11 +113,11 @@ public static class Extensions
                 headerWithWidthPadding.Select((header, i) => Pad(header.Key, header.Value))
             )
             + _markdownTableEndingSeparator;
-        
+
         yield return _markdownTableStartingSeparator
             + string.Join(
                 _markdownTableInnerSeparator,
-                headerWithWidthPadding.Select((header, i) => 
+                headerWithWidthPadding.Select((header, i) =>
                     Pad(string.Empty, header.Value, _markdownTableUnderlineChar)
                 )
             )
@@ -108,7 +135,7 @@ public static class Extensions
     {
         foreach (FixFragment entry in entries)
         {
-            if(cancellationToken.IsCancellationRequested) 
+            if (cancellationToken.IsCancellationRequested)
             {
                 break;
             }

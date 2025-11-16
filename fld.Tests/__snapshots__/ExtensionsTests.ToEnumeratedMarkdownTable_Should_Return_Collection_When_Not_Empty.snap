@@ -1,0 +1,7 @@
+﻿[
+  "| Tag   | Name          | Value     |",
+  "| ----- | ------------- | --------- |",
+  "| 8     | BeginString   | FIX.4.2   |",
+  "| 55    | Symbol        | AAPL      |",
+  "| 55555 | Long Tag Name | tag value |"
+]

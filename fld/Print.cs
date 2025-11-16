@@ -1,3 +1,5 @@
+using fld.Models;
+
 namespace fld;
 
 public static class Print

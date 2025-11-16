@@ -1,7 +1,8 @@
 using CommandLine;
 
-namespace fld;
+namespace fld.Models;
 
+[ExcludeFromCodeCoverage]
 public sealed record Options
 {
     [Value(0, MetaName = "fixlog", HelpText = "The FIX log string to decode", Required = false)]

@@ -1,22 +1,22 @@
 using CommandLine;
-
 using fld;
+using fld.Models;
 
-var cts = new CancellationTokenSource();
+using var cts = new CancellationTokenSource();
 
 Console.CancelKeyPress += (sender, e) =>
 {
-    e.Cancel = true;
     cts.Cancel();
+    e.Cancel = true;
 };
 
-Parser.Default.ParseArguments<Options>(args)
+var result = Parser.Default.ParseArguments<Options>(args)
     .WithParsed(options =>
     {
-        if (string.IsNullOrEmpty(options.FixLog))
+        if (string.IsNullOrWhiteSpace(options.FixLog))
         {
             Console.WriteLine("Please provide a FIX log string.");
-            return;
+            Environment.Exit(1);
         }
 
         Decoder.Decode(
@@ -26,6 +26,10 @@ Parser.Default.ParseArguments<Options>(args)
             cts.Token
         ).Switch(
             entries => Print.AsMarkdown(entries, cts.Token),
-            Console.WriteLine
+            error => 
+            {
+                Console.WriteLine(error);
+                Environment.Exit(1);
+            }
         );
     });

@@ -1,3 +1,4 @@
+using fld.Models;
 using OneOf;
 using QuickFix;
 using QuickFix.Fields;
@@ -10,13 +11,34 @@ public static class Decoder
     {
         try
         {
-            return new Message(fixLogText, validateLog);
-        } 
-        catch(Exception ex)
+            var result = new Message(fixLogText, validateLog);
+
+            return result.Any() switch
+            {
+                true => result,
+                _ => new ArgumentException(
+                    "No fields could be parsed for provided fix log."
+                )
+            };
+        }
+        catch (Exception ex)
         {
             return ex;
         }
     }
+
+    private static OneOf<string, Exception> GetFixVersion(Message fixLogMessage)
+    {
+        try
+        {
+            return fixLogMessage.Header.GetString(Tags.BeginString);
+        }
+        catch (Exception ex)
+        {
+            return ex;
+        }
+    }
+
     public static OneOf<IReadOnlyCollection<FixFragment>, string> Decode(
         string fixLogText,
         char delimiter,
@@ -27,19 +49,28 @@ public static class Decoder
         var normalizedFixLogText = fixLogText.ToNormalizedFixLogText(delimiter);
         var fixLogMessageParsed = ParseFixLogText(normalizedFixLogText, validateLog);
 
-        if(fixLogMessageParsed.IsT1)
+        if (fixLogMessageParsed.IsT1)
         {
-            return $"An error occurred while parsing the provided fix log '({fixLogText})' with error: {fixLogMessageParsed.AsT1.Message}";
+            return $"An error occurred while parsing the provided fix log '{fixLogText}' with error: {fixLogMessageParsed.AsT1.Message}";
         }
 
         var fixLogMessage = fixLogMessageParsed.AsT0;
 
-        var fixVersion = fixLogMessage.Header.GetString(Tags.BeginString);
+        var fixVersion = GetFixVersion(fixLogMessage).Match(
+            version => version,
+            _ => string.Empty
+        );
+
+        if (fixVersion == string.Empty)
+        {
+            return $"Could not determine fix version for provided fix log '{fixLogText}'.";
+        }
+
         var fixNamesDefinition = fixVersion.ToFixTagDefinitions();
 
         if (fixNamesDefinition == null)
         {
-            return $"Unsupported fix version {fixVersion}";
+            return $"Unsupported fix version '{fixVersion}' for provided fix log '{fixLogText}'.";
         }
 
         var result = new List<FixFragment>();
@@ -50,7 +81,7 @@ public static class Decoder
 
         foreach (KeyValuePair<int, IField> field in collection)
         {
-            if(cancellationToken.IsCancellationRequested) 
+            if (cancellationToken.IsCancellationRequested)
             {
                 return Array.Empty<FixFragment>();
             }
@@ -60,7 +91,7 @@ public static class Decoder
 
             result.Add(
                 new(
-                    tag.ToString(), 
+                    tag.ToString(),
                     name ?? string.Empty,
                     field.Value.ToString()
                 )
