@@ -2,7 +2,7 @@ using CommandLine;
 
 namespace fld;
 
-public record Options
+public sealed record Options
 {
     [Value(0, MetaName = "fixlog", HelpText = "The FIX log string to decode", Required = false)]
     public string FixLog { get; set; } = string.Empty;

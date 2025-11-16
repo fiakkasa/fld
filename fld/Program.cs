@@ -2,6 +2,14 @@ using CommandLine;
 
 using fld;
 
+var cts = new CancellationTokenSource();
+
+Console.CancelKeyPress += (sender, e) =>
+{
+    e.Cancel = true;
+    cts.Cancel();
+};
+
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed(options =>
     {
@@ -14,9 +22,10 @@ Parser.Default.ParseArguments<Options>(args)
         Decoder.Decode(
             options.FixLog,
             options.Delimiter,
-            options.ValidateLog
+            options.ValidateLog,
+            cts.Token
         ).Switch(
-            Print.AsMarkdown,
+            entries => Print.AsMarkdown(entries, cts.Token),
             Console.WriteLine
         );
     });
