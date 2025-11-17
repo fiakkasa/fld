@@ -1,0 +1,57 @@
+﻿[
+  {
+    "Tag": "8",
+    "Name": "BeginString",
+    "Value": "FIX.4.2"
+  },
+  {
+    "Tag": "9",
+    "Name": "BodyLength",
+    "Value": "76"
+  },
+  {
+    "Tag": "34",
+    "Name": "MsgSeqNum",
+    "Value": "1"
+  },
+  {
+    "Tag": "35",
+    "Name": "MsgType",
+    "Value": "A"
+  },
+  {
+    "Tag": "49",
+    "Name": "SenderCompID",
+    "Value": "BuySide"
+  },
+  {
+    "Tag": "52",
+    "Name": "SendingTime",
+    "Value": "20190605-11:27:06.897"
+  },
+  {
+    "Tag": "56",
+    "Name": "TargetCompID",
+    "Value": "SellSide"
+  },
+  {
+    "Tag": "98",
+    "Name": "EncryptMethod",
+    "Value": "0"
+  },
+  {
+    "Tag": "108",
+    "Name": "HeartBtInt",
+    "Value": "30"
+  },
+  {
+    "Tag": "141",
+    "Name": "ResetSeqNumFlag",
+    "Value": "Y"
+  },
+  {
+    "Tag": "10",
+    "Name": "CheckSum",
+    "Value": "008"
+  }
+]

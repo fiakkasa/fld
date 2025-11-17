@@ -1,8 +1,9 @@
 using CommandLine;
 
-namespace fld;
+namespace fld.Models;
 
-public record Options
+[ExcludeFromCodeCoverage]
+public sealed record Options
 {
     [Value(0, MetaName = "fixlog", HelpText = "The FIX log string to decode", Required = false)]
     public string FixLog { get; set; } = string.Empty;
