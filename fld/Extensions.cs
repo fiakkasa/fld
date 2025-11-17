@@ -89,16 +89,16 @@ public static class Extensions
         };
         SetMaxWidths(entries, headerWithWidthPadding, cancellationToken);
 
-        int maxTagLength = headerWithWidthPadding[nameof(FixFragment.Tag)];
-        int maxNameLength = headerWithWidthPadding[nameof(FixFragment.Name)];
-        int maxValueLength = headerWithWidthPadding[nameof(FixFragment.Value)];
+        var maxTagLength = headerWithWidthPadding[nameof(FixFragment.Tag)];
+        var maxNameLength = headerWithWidthPadding[nameof(FixFragment.Name)];
+        var maxValueLength = headerWithWidthPadding[nameof(FixFragment.Value)];
 
         foreach (var item in headerWithWidthPadding.ToMarkdownTableHeader(cancellationToken))
         {
             yield return item;
         }
 
-        foreach (FixFragment entry in entries)
+        foreach (var entry in entries)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -151,7 +151,7 @@ public static class Extensions
         CancellationToken cancellationToken = default
     )
     {
-        foreach (FixFragment entry in entries)
+        foreach (var entry in entries)
         {
             if (cancellationToken.IsCancellationRequested)
             {

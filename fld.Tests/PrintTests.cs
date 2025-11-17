@@ -35,8 +35,8 @@ public class PrintTests
         {
             FixFragment[] entries =
             [
-                new ("8", "BeginString", "FIX.4.2"),
-                new ("55", "Symbol", "AAPL"),
+                new("8", "BeginString", "FIX.4.2"),
+                new("55", "Symbol", "AAPL")
             ];
             Print.AsMarkdown(entries, CancellationToken.None);
 

@@ -53,10 +53,11 @@ public static class Decoder
 
         var fixLogMessage = fixLogMessageParsed.AsT0;
 
-        var fixVersion = GetFixVersion(fixLogMessage).Match(
-            version => version,
-            _ => string.Empty
-        );
+        var fixVersion = GetFixVersion(fixLogMessage)
+            .Match(
+                version => version,
+                _ => string.Empty
+            );
 
         if (fixVersion == string.Empty)
         {
