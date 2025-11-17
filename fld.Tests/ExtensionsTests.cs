@@ -16,7 +16,7 @@ public class ExtensionsTests
     [InlineData("8=FIX.4.2|55=AAPL", '|', "8=FIX.4.2\u000155=AAPL\u0001", "no_trailing_delimiter")]
     [InlineData("8=FIX.4.2^55=AAPL^", '^', "8=FIX.4.2\u000155=AAPL\u0001", "custom_delimiter")]
     [InlineData("8=FIX.4.2*55=AAPL*", '|', "8=FIX.4.2*55=AAPL*", "mismatched_delimiter")]
-    public async Task ToNormalizedFixLogText_Should_Return_Resulting_Text(
+    public void ToNormalizedFixLogText_Should_Return_Resulting_Text(
         string fixLog,
         char delimiter,
         string expectedResult,
@@ -32,7 +32,7 @@ public class ExtensionsTests
     [Theory]
     [InlineData("FIX.4.2")]
     [InlineData("FIX.4.4")]
-    public async Task ToFixTagDefinitions_Should_Return_Correct_Definitions_When_Supported(
+    public void ToFixTagDefinitions_Should_Return_Correct_Definitions_When_Supported(
         string fixVersion
     )
     {
@@ -45,7 +45,7 @@ public class ExtensionsTests
     [Theory]
     [InlineData("")]
     [InlineData("FIX.1.1")]
-    public async Task ToFixTagDefinitions_Should_Return_Null_Definitions_When_Not_Supported(
+    public void ToFixTagDefinitions_Should_Return_Null_Definitions_When_Not_Supported(
        string fixVersion
     )
     {
