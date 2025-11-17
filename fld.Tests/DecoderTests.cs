@@ -53,7 +53,7 @@ public class DecoderTests
     [Fact]
     public void Decode_Should_Return_Empty_Message_When_Cancellation_Requested()
     {
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         var result = Decoder.Decode("8=FIX.4.2|55=AAPL|", '|', false, cts.Token);

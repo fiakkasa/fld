@@ -88,7 +88,7 @@ public class ExtensionsTests
     [Fact]
     public void ToEnumeratedMarkdownTable_Should_Return_Empty_Collection_When_Cancellation_Requested()
     {
-        var cts = new CancellationTokenSource();
+        using var cts = new CancellationTokenSource();
         cts.Cancel();
 
         FixFragment[] collection =
