@@ -1,0 +1,18 @@
+﻿[
+  {
+    "Key": 8,
+    "Value": {
+      "Value": "FIX.4.2",
+      "Tag": 8,
+      "Obj": "FIX.4.2"
+    }
+  },
+  {
+    "Key": 55,
+    "Value": {
+      "Value": "AAPL",
+      "Tag": 55,
+      "Obj": "AAPL"
+    }
+  }
+]

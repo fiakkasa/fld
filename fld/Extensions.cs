@@ -1,7 +1,7 @@
 using fld.Definitions;
 using fld.Models;
-
 using QuickFix;
+using QuickFix.Fields;
 
 namespace fld;
 
@@ -53,6 +53,24 @@ public static class Extensions
             _ => null
         };
 
+    public static IEnumerable<KeyValuePair<int, IField>> AsFullEnumerable(this Message fixMessage)
+    {
+        foreach (var field in fixMessage.Header)
+        {
+            yield return field;
+        }
+
+        foreach (var field in fixMessage)
+        {
+            yield return field;
+        }
+
+        foreach (var field in fixMessage.Trailer)
+        {
+            yield return field;
+        }
+    }
+
     public static IEnumerable<string> ToEnumeratedMarkdownTable(
         this IReadOnlyCollection<FixFragment> entries,
         CancellationToken cancellationToken = default
@@ -71,16 +89,16 @@ public static class Extensions
         };
         SetMaxWidths(entries, headerWithWidthPadding, cancellationToken);
 
-        int maxTagLength = headerWithWidthPadding[nameof(FixFragment.Tag)];
-        int maxNameLength = headerWithWidthPadding[nameof(FixFragment.Name)];
-        int maxValueLength = headerWithWidthPadding[nameof(FixFragment.Value)];
+        var maxTagLength = headerWithWidthPadding[nameof(FixFragment.Tag)];
+        var maxNameLength = headerWithWidthPadding[nameof(FixFragment.Name)];
+        var maxValueLength = headerWithWidthPadding[nameof(FixFragment.Value)];
 
         foreach (var item in headerWithWidthPadding.ToMarkdownTableHeader(cancellationToken))
         {
             yield return item;
         }
 
-        foreach (FixFragment entry in entries)
+        foreach (var entry in entries)
         {
             if (cancellationToken.IsCancellationRequested)
             {
@@ -133,7 +151,7 @@ public static class Extensions
         CancellationToken cancellationToken = default
     )
     {
-        foreach (FixFragment entry in entries)
+        foreach (var entry in entries)
         {
             if (cancellationToken.IsCancellationRequested)
             {

@@ -1,5 +1,4 @@
 using CommandLine;
-
 using fld;
 using fld.Models;
 
@@ -18,7 +17,8 @@ Parser.Default.ParseArguments<Options>(args)
             options.Delimiter,
             options.ValidateLog,
             cts.Token
-        ).Switch(
+        )
+        .Switch(
             entries => Print.AsMarkdown(entries, cts.Token),
             error =>
             {

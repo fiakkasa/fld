@@ -1,4 +1,5 @@
 using fld.Models;
+using QuickFix;
 
 namespace fld.Tests;
 
@@ -46,12 +47,32 @@ public class ExtensionsTests
     [InlineData("")]
     [InlineData("FIX.1.1")]
     public void ToFixTagDefinitions_Should_Return_Null_Definitions_When_Not_Supported(
-       string fixVersion
+        string fixVersion
     )
     {
         var result = fixVersion.ToFixTagDefinitions();
 
         Assert.Null(result);
+    }
+
+    [Theory]
+    [InlineData("8=FIX.4.2\u0001", 1, "header_only")]
+    [InlineData("5=AAPL\u0001", 1, "body_only")]
+    [InlineData("10=5\u0001", 1, "trailer_only")]
+    [InlineData("8=FIX.4.2\u000155=AAPL\u0001", 2, "header_body")]
+    [InlineData("8=FIX.4.2\u000110=5\u0001", 2, "header_trailer")]
+    [InlineData("55=AAPL\u000110=5\u0001", 2, "body_trailer")]
+    [InlineData("8=FIX.4.2\u000155=AAPL\u000110=5\u0001", 3, "all_sections")]
+    public void AsFullEnumerable_Should_Return_Definitions_For_Sections(
+        string fixLog,
+        int expectedCount,
+        string discriminator
+    )
+    {
+        var result = new Message(fixLog, false).AsFullEnumerable().ToArray();
+
+        Assert.Equal(expectedCount, result.Length);
+        result.MatchSnapshot($"{_name}.{nameof(AsFullEnumerable_Should_Return_Definitions_For_Sections)}.{discriminator}");
     }
 
     [Fact]
@@ -64,7 +85,7 @@ public class ExtensionsTests
         Assert.Empty(result);
     }
 
-     [Fact]
+    [Fact]
     public void ToEnumeratedMarkdownTable_Should_Return_Empty_Collection_When_Cancellation_Requested()
     {
         var cts = new CancellationTokenSource();
@@ -72,8 +93,8 @@ public class ExtensionsTests
 
         FixFragment[] collection =
         [
-            new ("8", "BeginString", "FIX.4.2"),
-            new ("55", "Symbol", "AAPL"),
+            new("8", "BeginString", "FIX.4.2"),
+            new("55", "Symbol", "AAPL")
         ];
 
         var result = collection.ToEnumeratedMarkdownTable(cts.Token);
@@ -86,9 +107,9 @@ public class ExtensionsTests
     {
         FixFragment[] collection =
         [
-            new ("8", "BeginString", "FIX.4.2"),
-            new ("55", "Symbol", "AAPL"),
-            new ("55555", "Long Tag Name", "tag value"),
+            new("8", "BeginString", "FIX.4.2"),
+            new("55", "Symbol", "AAPL"),
+            new("55555", "Long Tag Name", "tag value")
         ];
 
         var result = collection.ToEnumeratedMarkdownTable().ToArray();

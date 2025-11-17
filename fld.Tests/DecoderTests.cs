@@ -7,11 +7,11 @@ public class DecoderTests
     [Theory]
     [InlineData("", '|', false, "Please provide a FIX log string.", "blank")]
     [InlineData(" ", '|', false, "Please provide a FIX log string.", "empty")]
-    [InlineData("9=176|35=D", '|', false, "error occurred while parsing", "invalid_message")]
+    [InlineData("abc123", '|', false, "error occurred while parsing", "invalid_message")]
     [InlineData("55=AAPL|", '|', false, "not determine FIX version", "no_fix_version")]
     [InlineData("8=FIX.1.1|55=AAPL|", '|', false, "Unsupported FIX version", "unsupported_fix_version")]
-    [InlineData("8=FIX.4.2|55=AAPL|", '|', true, "error occurred while parsing", "error_on_validation")]
-    [InlineData("8=FIX.4.2|55=AAPL|", '^', true, "error occurred while parsing", "mismatched_delimiter")]
+    [InlineData("8=FIX.4.2|55=AAPL|", '|', true, "error occurred while parsing", "strict_error_on_validation")]
+    [InlineData("8=FIX.4.2|55=AAPL|", '^', true, "error occurred while parsing", "strict_mismatched_delimiter")]
     public void Decode_Should_Return_Error_Message_When_FixLog_Is_Invalid(
         string fixLog,
         char delimiter,
