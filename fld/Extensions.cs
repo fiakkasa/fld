@@ -1,7 +1,7 @@
 using fld.Definitions;
 using fld.Models;
-
 using QuickFix;
+using QuickFix.Fields;
 
 namespace fld;
 
@@ -52,6 +52,24 @@ public static class Extensions
             "FIX.4.4" => FixTagDefinitions.Fix44,
             _ => null
         };
+
+    public static IEnumerable<KeyValuePair<int, IField>> AsFullEnumerable(this Message fixMessage)
+    {
+        foreach (var field in fixMessage.Header)
+        {
+            yield return field;
+        }
+
+        foreach (var field in fixMessage)
+        {
+            yield return field;
+        }
+
+        foreach (var field in fixMessage.Trailer)
+        {
+            yield return field;
+        }
+    }
 
     public static IEnumerable<string> ToEnumeratedMarkdownTable(
         this IReadOnlyCollection<FixFragment> entries,

@@ -11,15 +11,7 @@ public static class Decoder
     {
         try
         {
-            var result = new Message(fixLogText, validateLog);
-
-            return result.Any() switch
-            {
-                true => result,
-                _ => new ArgumentException(
-                    "No fields could be parsed for provided fix log."
-                )
-            };
+            return new Message(fixLogText, validateLog);
         }
         catch (Exception ex)
         {
@@ -79,12 +71,8 @@ public static class Decoder
         }
 
         var result = new List<FixFragment>();
-        var collection =
-            fixLogMessage.Header
-                .Concat(fixLogMessage)
-                .Concat(fixLogMessage.Trailer);
 
-        foreach (KeyValuePair<int, IField> field in collection)
+        foreach (var field in fixLogMessage.AsFullEnumerable())
         {
             if (cancellationToken.IsCancellationRequested)
             {
