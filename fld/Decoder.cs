@@ -46,12 +46,17 @@ public static class Decoder
         CancellationToken cancellationToken = default
     )
     {
+        if (string.IsNullOrWhiteSpace(fixLogText))
+        {
+            return "Please provide a FIX log string.";
+        }
+
         var normalizedFixLogText = fixLogText.ToNormalizedFixLogText(delimiter);
         var fixLogMessageParsed = ParseFixLogText(normalizedFixLogText, validateLog);
 
         if (fixLogMessageParsed.IsT1)
         {
-            return $"An error occurred while parsing the provided fix log '{fixLogText}' with error: {fixLogMessageParsed.AsT1.Message}";
+            return $"An error occurred while parsing the provided FIX log '{fixLogText}' with error: {fixLogMessageParsed.AsT1.Message}";
         }
 
         var fixLogMessage = fixLogMessageParsed.AsT0;
@@ -63,14 +68,14 @@ public static class Decoder
 
         if (fixVersion == string.Empty)
         {
-            return $"Could not determine fix version for provided fix log '{fixLogText}'.";
+            return $"Could not determine FIX version for provided FIX log '{fixLogText}'.";
         }
 
         var fixNamesDefinition = fixVersion.ToFixTagDefinitions();
 
         if (fixNamesDefinition == null)
         {
-            return $"Unsupported fix version '{fixVersion}' for provided fix log '{fixLogText}'.";
+            return $"Unsupported FIX version '{fixVersion}' for provided FIX log '{fixLogText}'.";
         }
 
         var result = new List<FixFragment>();

@@ -1,1 +1,1 @@
-﻿An error occurred while parsing the provided fix log '8=FIX.4.2|55=AAPL|' with error: Invalid message: Header fields out of order
+﻿An error occurred while parsing the provided FIX log '8=FIX.4.2|55=AAPL|' with error: Invalid message: Header fields out of order
