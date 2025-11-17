@@ -11,7 +11,7 @@ Console.CancelKeyPress += (sender, e) =>
     e.Cancel = true;
 };
 
-var result = Parser.Default.ParseArguments<Options>(args)
+Parser.Default.ParseArguments<Options>(args)
     .WithParsed(options =>
         Decoder.Decode(
             options.FixLog,
