@@ -1,9 +1,9 @@
 namespace fld.Definitions;
 
-// https://www.onixs.biz/fix-dictionary.html
+// https://www.onixs.biz/fix-dictionary/4.2/fields_by_tag.html
 public static partial class FixTagDefinitions
 {
-    public static IReadOnlyDictionary<int, string> Fix42 { get; } = new Dictionary<int, string>
+    public static IReadOnlyDictionary<int, string> FIX_4_2 { get; } = new Dictionary<int, string>
     {
         { 1, "Account" },
         { 2, "AdvId" },
@@ -28,7 +28,7 @@ public static partial class FixTagDefinitions
         { 21, "HandlInst" },
         { 22, "IDSource" },
         { 23, "IOIid" },
-        { 24, "IOIOthSvc" },
+        { 24, "IOIOthSvc (no longer used)" },
         { 25, "IOIQltyInd" },
         { 26, "IOIRefID" },
         { 27, "IOIShares" },
@@ -51,11 +51,11 @@ public static partial class FixTagDefinitions
         { 44, "Price" },
         { 45, "RefSeqNum" },
         { 46, "RelatdSym" },
-        { 47, "Rule80A-OrderCapacity" },
+        { 47, "Rule80A (aka OrderCapacity)" },
         { 48, "SecurityID" },
         { 49, "SenderCompID" },
         { 50, "SenderSubID" },
-        { 51, "SendingDate" },
+        { 51, "SendingDate (no longer used)" },
         { 52, "SendingTime" },
         { 53, "Shares" },
         { 54, "Side" },
@@ -72,7 +72,7 @@ public static partial class FixTagDefinitions
         { 65, "SymbolSfx" },
         { 66, "ListID" },
         { 67, "ListSeqNo" },
-        { 68, "TotNoOrders" },
+        { 68, "TotNoOrders (formerly named: ListNoOrds)" },
         { 69, "ListExecInst" },
         { 70, "AllocID" },
         { 71, "AllocTransType" },
@@ -89,8 +89,8 @@ public static partial class FixTagDefinitions
         { 82, "NoRpts" },
         { 83, "RptSeq" },
         { 84, "CxlQty" },
-        { 85, "NoDlvyInst" },
-        { 86, "DlvyInst" },
+        { 85, "NoDlvyInst (no longer used)" },
+        { 86, "DlvyInst (no longer used)" },
         { 87, "AllocStatus" },
         { 88, "AllocRejCode" },
         { 89, "Signature" },
@@ -128,7 +128,7 @@ public static partial class FixTagDefinitions
         { 122, "OrigSendingTime" },
         { 123, "GapFillFlag" },
         { 124, "NoExecs" },
-        { 125, "CxlType" },
+        { 125, "CxlType (no longer used)" },
         { 126, "ExpireTime" },
         { 127, "DKReason" },
         { 128, "DeliverToCompID" },

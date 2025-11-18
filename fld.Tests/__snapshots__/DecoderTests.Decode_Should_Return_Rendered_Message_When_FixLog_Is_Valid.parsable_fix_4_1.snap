@@ -1,0 +1,12 @@
+﻿[
+  {
+    "Tag": "8",
+    "Name": "BeginString",
+    "Value": "FIX.4.1"
+  },
+  {
+    "Tag": "55",
+    "Name": "Symbol",
+    "Value": "AAPL"
+  }
+]

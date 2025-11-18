@@ -31,7 +31,10 @@ public class ExtensionsTests
     }
 
     [Theory]
+    [InlineData("FIX.4.0")]
+    [InlineData("FIX.4.1")]
     [InlineData("FIX.4.2")]
+    [InlineData("FIX.4.3")]
     [InlineData("FIX.4.4")]
     public void ToFixTagDefinitions_Should_Return_Correct_Definitions_When_Supported(
         string fixVersion
@@ -41,11 +44,13 @@ public class ExtensionsTests
 
         Assert.NotNull(result);
         Assert.NotEmpty(result);
+
+        result.MatchSnapshot($"{_name}.{nameof(ToFixTagDefinitions_Should_Return_Correct_Definitions_When_Supported)}.{fixVersion}");
     }
 
     [Theory]
     [InlineData("")]
-    [InlineData("FIX.1.1")]
+    [InlineData("ZIX.1.1")]
     public void ToFixTagDefinitions_Should_Return_Null_Definitions_When_Not_Supported(
         string fixVersion
     )
