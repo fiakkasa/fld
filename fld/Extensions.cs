@@ -48,8 +48,11 @@ public static class Extensions
     public static IReadOnlyDictionary<int, string>? ToFixTagDefinitions(this string fixVersion) =>
         fixVersion switch
         {
-            "FIX.4.2" => FixTagDefinitions.Fix42,
-            "FIX.4.4" => FixTagDefinitions.Fix44,
+            Consts.FIX_4_0 => FixTagDefinitions.FIX_4_0,
+            Consts.FIX_4_1 => FixTagDefinitions.FIX_4_1,
+            Consts.FIX_4_2 => FixTagDefinitions.FIX_4_2,
+            Consts.FIX_4_3 => FixTagDefinitions.FIX_4_3,
+            Consts.FIX_4_4 => FixTagDefinitions.FIX_4_4,
             _ => null
         };
 

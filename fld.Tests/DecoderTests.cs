@@ -28,7 +28,11 @@ public class DecoderTests
     }
 
     [Theory]
-    [InlineData("8=FIX.4.2|55=AAPL|", '|', false, "parsable")]
+    [InlineData("8=FIX.4.0|55=AAPL|", '|', false, "parsable_fix_4_0")]
+    [InlineData("8=FIX.4.1|55=AAPL|", '|', false, "parsable_fix_4_1")]
+    [InlineData("8=FIX.4.2|55=AAPL|", '|', false, "parsable_fix_4_2")]
+    [InlineData("8=FIX.4.3|55=AAPL|", '|', false, "parsable_fix_4_3")]
+    [InlineData("8=FIX.4.4|55=AAPL|", '|', false, "parsable_fix_4_4")]
     [InlineData("[8=FIX.4.2|55=AAPL|", '|', false, "start_bracket")]
     [InlineData("8=FIX.4.2|55=AAPL|]", '|', false, "end_bracket")]
     [InlineData("[8=FIX.4.2|55=AAPL|]", '|', false, "start_end_brackets")]
